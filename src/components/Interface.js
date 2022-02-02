@@ -2,7 +2,6 @@ import Form from './Form'
 import eth from '../img/face.png' 
 import pistol from '../img/pistol.png' 
 
-
 export default function Interface(){
 
     return (

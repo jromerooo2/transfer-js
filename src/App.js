@@ -4,7 +4,6 @@ function App() {
   return (
     <div className="bg-purple-400 stati">
       <Interface />
-
     </div>
   );
 }
