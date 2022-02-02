@@ -1,10 +1,12 @@
 import { connector } from "../../config/web3";
 import { useCallback, useEffect } from "react";
-import { useWeb3React } from "@web3-react/core";
+import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
 import useTruncatedAddress from '../../hooks/useWalletData';
 
 export default function Button(props){
-    const { active, activate, deactivate, account } = useWeb3React();
+    const { active, activate, deactivate, account, error } = useWeb3React();
+    const isUnsupportedChain = error instanceof UnsupportedChainIdError;
+
     
     const connect = useCallback(() => {
         activate(connector);
@@ -40,8 +42,9 @@ export default function Button(props){
                             }
                         </button>
                     ) :(
-                        <button type='button' onClick={connect}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Connect                        
+                        <button type='button' onClick={connect}  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        disabled={isUnsupportedChain}>
+                                {isUnsupportedChain ? "Unsupported Chain" : "Connect your Wallet"}
                         </button>                    
                         )                        
                 }
