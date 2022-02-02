@@ -5,10 +5,13 @@ import TransactionArtifact from "../../config/web3/artifacts/Transaction";
 const { address, abi } = TransactionArtifact;
 
 const useTransfer = () => {
-    const { active, library } = useWeb3React();
-    const transfer = useMemo(() => {
-        if (active) return new library.eth.Contract(abi, address);
-    }, [active,library?.eth?.Contract]);
+
+    const { active, library, chainId } = useWeb3React();
+
+    const transfer = useMemo(
+        () => {
+        if (active) return library?.eth?.contract(abi, address[chainId]);
+    }, [active, chainId, library?.eth?.contract]);
 
     return transfer;
 }
