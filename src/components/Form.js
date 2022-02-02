@@ -1,35 +1,31 @@
 import { useWeb3React,UnsupportedChainIdError } from "@web3-react/core";
 import { useState, useCallback, useEffect } from "react";
 import useTransfer from "../hooks/useTransfer";
-import { connector } from "../config/web3";
 
 
 export default function Form(){
     const { active, activate, deactivate, account, error, library } = useWeb3React();
     const [accountTo, setAccountTo] = useState("");
     const [amount, setAmount] = useState(0);
-    const usetransfer = useTransfer();
+    
+    const transfer = useTransfer();
     const isUnsupportedChain = error instanceof UnsupportedChainIdError;
 
+    const sendEth = useCallback( () => {
+        if(transfer){
 
-    const connect = useCallback(() => {
-        activate(connector);
-        localStorage.setItem("previouslyConnected", "true");
-      }, [activate]);
+        
+        console.log(transfer)
+        transfer.methods.call({ from: account }, function(error, result) {
+            console.log(result);
+        });
+    }
+    }, [transfer, account])
+
     
-      const disconnect = () => {
-        deactivate();
-        localStorage.removeItem("previouslyConnected");
-      };
-
-    // const sendEth = () => {
-    //     usetransfer.methods
-    //                     .transferingeth(account,accountTo,amount)
-    //                     .send({from:account})
-    // }
+    
     return (
         <>
-        
         <form className="md:w-96">
             <div className="mb-6">
                 <label className="block mb-2 font-mono text-sm font-medium dark:text-gray-400">Receiver Address</label>
@@ -42,15 +38,11 @@ export default function Form(){
 
             </form>
             {active ? (
-                    <button type='button'  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Send Crypto</button>
+                    <button type='button'  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={sendEth}>Send Crypto</button>
                 ):(
-                    <button type='button'  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"           
-                    onClick={connect}
-                    disabled={isUnsupportedChain}
-                    >
-                          {isUnsupportedChain ? "Red no soportada" : "Conectar wallet"}
-
-                    </button>
+                    <h1 disabled={isUnsupportedChain}>
+                        {isUnsupportedChain ? "Unsupported Chain, please verify you're in Rinkeby" : "Connect your Wallet"}
+                    </h1>
                 )
             }
 
