@@ -1,13 +1,33 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400&family=Poppins:wght@200;400;800&family=Rubik:wght@300&display=swap');
+ body{
+   overflow: hidden;
+ }
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+.font-rubik{
+  font-family: 'Rubik', sans-serif;
+}
+.face{
+  animation: face-animation 20s infinite;
+  filter: drop-shadow(30px 10px 4px #4444dd);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@keyframes face-animation {
+  0% {
+    transform: translate3d(0);
+  }
+  25% {
+      transform: translate3d(-1rem, -1rem, 0);  
+    }
+    50% {
+      transform: translate3d(-2.7rem, 0, 1rem);
+    }
+    100% {
+      transform: translate3d(0);
+    }
 }
+  

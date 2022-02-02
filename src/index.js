@@ -2,12 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { TransactionContext } from './context/Transaction';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <TransactionContext>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  </TransactionContext>,
   document.getElementById('root')
 );
 
