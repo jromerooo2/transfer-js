@@ -1,10 +1,10 @@
 import { useWeb3React,UnsupportedChainIdError } from "@web3-react/core";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import useTransfer from "../hooks/useTransfer";
 
 
 export default function Form(){
-    const { active, activate, deactivate, account, error, library } = useWeb3React();
+    const { active, account, error } = useWeb3React();
     const [accountTo, setAccountTo] = useState("");
     const [amount, setAmount] = useState(0);
     
@@ -16,7 +16,7 @@ export default function Form(){
 
         
         console.log(transfer)
-        transfer.methods.call({ from: account }, function(error, result) {
+        transfer.methods.getTransactionCount().call({ from: account }, function(error, result) {
             console.log(result);
         });
     }

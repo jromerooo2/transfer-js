@@ -10,9 +10,9 @@ const useTransfer = () => {
 
     const transfer = useMemo(
         () => {
-        if (active) return library?.eth?.contract(abi, address[chainId]);
+            if(active) return new library.eth.Contract(abi, address[chainId])
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [active, chainId, library?.eth.contract]);
+    }, [active, chainId, library?.eth?.Contract]);
 
     return transfer;
 }
