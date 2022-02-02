@@ -1,6 +1,8 @@
 import { useWeb3React,UnsupportedChainIdError } from "@web3-react/core";
 import { useState, useCallback } from "react";
 import useTransfer from "../hooks/useTransfer";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Form(){
@@ -12,21 +14,64 @@ export default function Form(){
     const isUnsupportedChain = error instanceof UnsupportedChainIdError;
 
     const sendEth = useCallback( () => {
-        if(transfer){
+        if(transfer){        
 
-        
-        console.log(transfer)
-        transfer.methods.getTransactionCount().call({ from: account }, function(error, result) {
-            console.log(result);
-        });
+        transfer.methods.getTransactionCount().send({from: account})
+            .on("transactionHash", (hash)=>{
+                toast.info('🦄 TXN #  ' + hash, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    theme: "dark",
+                    draggable: false,
+                    closeOnClick: false,
+                    progress: undefined,
+                    });
+            })
+            .on("receipt", ()=>{
+                toast.success(`🦄 TXN Confirmed.` , {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    theme: "dark",
+                    draggable: false,
+                    closeOnClick: true,
+                    progress: undefined,
+                })
+              })
+            .on("error", (error)=>{
+                toast.error(error.message , {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    theme: "dark",
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: false,
+                    progress: undefined,
+                })
+              })
     }
-    }, [transfer, account])
+    }, [account, transfer]);
 
     
     
     return (
         <>
         <form className="md:w-96">
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                />
+                {/* Same as */}
+                <ToastContainer />
             <div className="mb-6">
                 <label className="block mb-2 font-mono text-sm font-medium dark:text-gray-400">Receiver Address</label>
                 <input type="text" id="eth" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light font-mono" placeholder="0X0000...0000" required onChange={setAccountTo}></input>

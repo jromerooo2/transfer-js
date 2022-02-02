@@ -15,6 +15,9 @@
   animation: face-animation 20s infinite;
   filter: drop-shadow(30px 10px 4px #4444dd);
 }
+.Toastify__toast-body {
+  font-weight: bold;
+}
 
 @keyframes face-animation {
   0% {
