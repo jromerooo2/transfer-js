@@ -31,6 +31,11 @@ export default function Interface(){
 
                     </div>
             </div>
+            <p className='absolute text-xl text-white bottom-4 font-poppins'>Programmed by &nbsp;             
+                <a className="hover:text-indigo-500" href='https://twitter.com/jromerooo2' target="_blank" rel="noreferrer">
+                     Juan Romero 👨‍💻.
+                </a>
+            </p>
         </div>
       </>
     ) 
