@@ -1,11 +1,12 @@
 import { connector } from "../../config/web3";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useWeb3React, UnsupportedChainIdError } from "@web3-react/core";
 import useTruncatedAddress from '../../hooks/useWalletData';
 
 export default function Button(props){
-    const { active, activate, deactivate, account, error } = useWeb3React();
+    const { active, activate, deactivate, account, error, library } = useWeb3React();
     const isUnsupportedChain = error instanceof UnsupportedChainIdError;
+    const [balance, setBalance] = useState(0);
 
     
     const connect = useCallback(() => {
@@ -13,12 +14,21 @@ export default function Button(props){
         localStorage.setItem("previouslyConnected", "true");
     }, [activate]);
     
+    const getBalance = useCallback(async () => {
+        const toSet = await library.eth.getBalance(account);
+        setBalance((toSet / 1e18).toFixed(2));
+      }, [library?.eth, account]);
+    
+    
     const disconnect = useCallback(
         () => {
             deactivate();
             localStorage.removeItem("previouslyConnected");
         },[deactivate])
         
+        useEffect(() => {
+            if(active) getBalance();
+        } , [active, getBalance]);
 
 
         useEffect(() => {
@@ -38,7 +48,15 @@ export default function Button(props){
                                     <line x1="18" y1="6" x2="6" y2="18" />
                                     <line x1="6" y1="6" x2="18" y2="18" />
                             </svg>
-                            {address !== undefined ? `${address}` : "🤔 Undefined Address"                                
+                            {address !== undefined ? (
+                                <div>
+                                    <h1> 
+                                        {address} &nbsp;
+                                    <span className="bg-gray-600"> ~ {balance}Ξ</span>    
+                                    
+                                    </h1>
+                                </div>
+                                ) : "🤔 Undefined Address"                                
                             }
                         </button>
                     ) :(

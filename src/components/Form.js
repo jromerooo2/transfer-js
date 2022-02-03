@@ -6,41 +6,65 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Form(){
-    const { active, account, error } = useWeb3React();
+    const { active, account, error, library } = useWeb3React();
     const [accountTo, setAccountTo] = useState("");
     const [amount, setAmount] = useState(0);
     
     const transfer = useTransfer();
     const isUnsupportedChain = error instanceof UnsupportedChainIdError;
-
-    const sendEth = useCallback( () => {
-        if(transfer){        
-
-        transfer.methods.getTransactionCount().send({from: account})
-            .on("transactionHash", (hash)=>{
-                toast.info('🦄 TXN #  ' + hash, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    theme: "dark",
-                    draggable: false,
-                    closeOnClick: false,
-                    progress: undefined,
-                    });
-            })
-            .on("receipt", ()=>{
-                toast.success(`🦄 TXN Confirmed.` , {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    theme: "dark",
-                    draggable: false,
-                    closeOnClick: true,
-                    progress: undefined,
-                })
-              })
-            .on("error", (error)=>{
-                toast.error(error.message , {
+    
+    const handleAddressChange = (e) =>{
+        setAccountTo(e.target.value);
+    }
+    const handleAmmountChange = (e) =>{
+        setAmount(e.target.value);
+    }
+    
+    const sendEth = () => { 
+        alert(accountTo)
+        const isAddress = library.utils.isAddress(accountTo);
+        if(transfer && isAddress){  
+              
+                transfer.methods.transferingeth(account, accountTo, amount).send({from: account})
+                    .on("transactionHash", (hash)=>{
+                        toast.info('🦄 TXN #  ' + hash,  {
+                            position: "bottom-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            theme: "dark",
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: false,
+                            progress: undefined,
+                        });
+                    })
+                    .on("receipt", ()=>{
+                        toast.success(`🎉 TXN Confirmed.` , {
+                            position: "bottom-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            theme: "dark",
+                            draggable: false,
+                            closeOnClick: true,
+                            progress: undefined,
+                        })
+                    })
+                    .on("error", (error)=>{
+                        toast.error(error.message , {
+                            position: "bottom-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            theme: "dark",
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: false,
+                            progress: undefined,
+                        })
+                    })
+                    
+            }else {
+                alert(library.utils.isAddress(accountTo))
+                toast.warning('Please verify the information.' ,  {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -50,9 +74,8 @@ export default function Form(){
                     draggable: false,
                     progress: undefined,
                 })
-              })
+            }
     }
-    }, [account, transfer]);
 
     
     
@@ -62,11 +85,12 @@ export default function Form(){
             <ToastContainer />
             <div className="mb-6">
                 <label className="block mb-2 font-mono text-sm font-medium dark:text-gray-400">Receiver Address</label>
-                <input type="text" id="eth" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light font-mono" placeholder="0X0000...0000" required onChange={setAccountTo}></input>
+                <input type="text" id="eth" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light font-mono" placeholder="0X0000...0000" required 
+                onChange={handleAddressChange}></input>
             </div>
             <div className="mb-6">
                 <label className="block mb-2 font-mono text-sm font-medium dark:text-gray-400">ETH ammount</label>
-                <input type="text" id="ammount" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light font-mono" required placeholder="1-10000" onChange={setAmount}></input>
+                <input type="text" id="ammount" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-800 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light font-mono" required placeholder="1-10000" onChange={handleAmmountChange}></input>
             </div>
 
             </form>
