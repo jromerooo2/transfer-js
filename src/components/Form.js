@@ -21,49 +21,54 @@ export default function Form(){
     }
     
     const sendEth = () => { 
-        alert(accountTo)
         const isAddress = library.utils.isAddress(accountTo);
-        if(transfer && isAddress){  
-              
-                transfer.methods.transferingeth(account, accountTo, amount).send({from: account})
+        
+        if(transfer && isAddress){              
+
+                library.eth.sendTransaction({
+                    from: account,
+                    to: accountTo,
+                    value: library.utils.toWei(amount, 'ether')                    
+                })                
                     .on("transactionHash", (hash)=>{
-                        toast.info('🦄 TXN #  ' + hash,  {
-                            position: "bottom-center",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            theme: "dark",
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: false,
-                            progress: undefined,
-                        });
-                    })
-                    .on("receipt", ()=>{
-                        toast.success(`🎉 TXN Confirmed.` , {
-                            position: "bottom-center",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            theme: "dark",
-                            draggable: false,
-                            closeOnClick: true,
-                            progress: undefined,
+                            toast.info('🦄 TXN #  ' + hash,  {
+                                position: "bottom-center",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                theme: "dark",
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: false,
+                                progress: undefined,
+                            });
                         })
-                    })
-                    .on("error", (error)=>{
-                        toast.error(error.message , {
-                            position: "bottom-center",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            theme: "dark",
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: false,
-                            progress: undefined,
+                        .on("receipt", ()=>{
+                            toast.success(`🎉 TXN Confirmed.` , {
+                                position: "bottom-center",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                theme: "dark",
+                                draggable: false,
+                                closeOnClick: true,
+                                progress: undefined,
+                            })
                         })
-                    })
+                        .on("error", (error)=>{
+                            toast.error(error.message , {
+                                position: "bottom-center",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                theme: "dark",
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: false,
+                                progress: undefined,
+                            })
+                        })
+                
+
                     
             }else {
-                alert(library.utils.isAddress(accountTo))
                 toast.warning('Please verify the information.' ,  {
                     position: "bottom-center",
                     autoClose: 5000,
