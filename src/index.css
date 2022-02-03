@@ -15,6 +15,10 @@
   animation: face-animation 20s infinite;
   filter: drop-shadow(30px 10px 4px #4444dd);
 }
+.face-reverse{
+  animation: face-animation-reverse 20s infinite;
+  filter: drop-shadow(30px 10px 4px #4444dd);
+}
 .Toastify__toast-body {
   font-weight: bold;
 }
@@ -28,6 +32,21 @@
     }
     50% {
       transform: translate3d(-2.7rem, 0, 1rem);
+    }
+    100% {
+      transform: translate3d(0);
+    }
+}
+@keyframes face-animation-reverse {
+  0% {
+    transform: translate3d(0);
+  }
+  25% {
+    transform: translate3d(-2.7rem, 0, 1rem);
+
+  }
+  50% {
+      transform: translate3d(-1rem, -1rem, 0);  
     }
     100% {
       transform: translate3d(0);

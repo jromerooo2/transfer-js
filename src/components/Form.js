@@ -1,5 +1,5 @@
 import { useWeb3React,UnsupportedChainIdError } from "@web3-react/core";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import useTransfer from "../hooks/useTransfer";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
